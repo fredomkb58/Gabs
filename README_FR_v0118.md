@@ -1,3 +1,5 @@
+<div align="center">
+
 ![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/Gabs-Logo-Blanc-256.svg)
 
 # GABS
@@ -13,6 +15,8 @@
 [![PHP Version](https://img.shields.io/badge/PHP-5.6%2B-blue)](https://php.net)
 [![Version](https://img.shields.io/badge/version-0.118-green)](https://github.com/fredomkb/gabs)
 [![License](https://img.shields.io/badge/license-MIT-orange)](LICENSE)
+
+</div>
 
 ---
 
@@ -612,6 +616,7 @@ Ajouter `_g` en fin de clé rend une variable scalaire accessible dans toutes le
 **MIT License** - Copyright (c) 2026 FredoMkb
 
 ---
+
 <div align="center">
 
 ![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/Gabs-Logo-Blanc-256.svg)
