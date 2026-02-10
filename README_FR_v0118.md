@@ -617,6 +617,17 @@ Ajouter `_g` en fin de clé rend une variable scalaire accessible dans toutes le
 
 ---
 
+## 🙏 Crédits
+
+**Auteur :** FredoMkb
+
+**Réalisé avec l'aide de :**
+- 🤖 Claude IA (Anthropic) — architecture, débogage, documentation
+- 🤖 Divers assistants IA — recherche et brainstorming
+- 🌐 StackOverflow, php.net, MDN, regex101 and the PHP community
+
+---
+
 <div align="center">
 
 ![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/Gabs-Logo-Blanc-256.svg)
