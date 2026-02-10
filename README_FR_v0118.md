@@ -66,7 +66,7 @@ Les moteurs de templates les plus connus aujourd'hui sont **puissants** mais sou
 
 ```bash
 # Télécharger Gabs.php
-wget https://raw.githubusercontent.com/fredomkb/gabs/main/Gabs.php
+wget https://raw.githubusercontent.com/fredomkb58/Gabs/main/Gabs.php
 ```
 
 ```php
