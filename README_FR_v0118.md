@@ -13,7 +13,7 @@
 *Version v0118*
 
 [![PHP Version](https://img.shields.io/badge/PHP-5.6%2B-blue)](https://php.net)
-[![Version](https://img.shields.io/badge/version-0.118-green)](https://github.com/fredomkb/gabs)
+[![Version](https://img.shields.io/badge/version-0118-green)](https://github.com/fredomkb/gabs)
 [![License](https://img.shields.io/badge/license-MIT-orange)](LICENSE)
 
 </div>
