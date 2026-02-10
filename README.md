@@ -618,6 +618,17 @@ Adding `_g` at the end of a key makes a scalar variable accessible inside all lo
 
 ---
 
+## 🙏 Credits
+
+**Author :** FredoMkb
+
+**Built with the help of :**
+- 🤖 Claude AI (Anthropic) — architecture, debugging, documentation
+- 🤖 Various AI assistants — research and brainstorming
+- 🌐 StackOverflow, php.net, MDN, regex101 and the PHP community
+
+---
+
 <div align="center">
 
 ![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/Gabs-Logo-Blanc-256.svg)
