@@ -113,7 +113,7 @@ $data = array(
 );
 ```
 
-### 2. Gabarit GABS (`template.gabs`)
+### 2. Gabarit GABS *(`template.gabs`)*
 
 Dans le gabarit **GABS**, placez **les clés du tableau PHP** au bon endroit avec la bonne syntaxe (voir dans les chapitres suivants).
 
@@ -143,7 +143,7 @@ Dans le gabarit **GABS**, placez **les clés du tableau PHP** au bon endroit ave
 
 ### 3. Rendu PHP *(`index.php`)*
 
-Dans votre **contrôleur PHP** (`index.php` par exemple), faites les inclusions de **GABS** et des **données PHP**, il suffit de créer **une instance de GABS** et de lancer le **rendu final HTML** avec la méthode publique `get()`… et c'est tout !
+Dans votre **contrôleur PHP** (*`index.php`* par exemple), faites les inclusions de **GABS** et des **données PHP**, il suffit de créer **une instance de GABS** et de lancer le **rendu final HTML** avec la méthode publique *`get()`*… et c'est tout !
 
 ```php
 <?php
@@ -251,11 +251,11 @@ $data = array(
 ```
 ```html
 <!-- Gabarit GABS -->
-<p>{h_content} à vérifier…</p> 
+<p>{h_content} à réaliser…</p> 
 ```
 ```html
 <!-- Résultat HTML -->
-<p><strong>Important</strong> à vérifier…</p> 
+<p><strong>Important</strong> à réaliser…</p> 
 ```
 
 **Données brutes forcées dans le gabarit *`|}`* :**
@@ -470,9 +470,9 @@ Affichage : 11 à 20 sur 150 (Page 2)
 
 #### Variables globales dans les boucles *`_g`*
 
-Par défaut, toutes les variables du niveau racine sont accessibles à l'intérieur des boucles. Ceci étant, il est fortement recommandé d'adopter une convention simple et très utile : ajouter le suffixe **`_g`** aux clés, dans le tableau de données principal (par exemple : `s_variable_globale_g`). 
+Par défaut, toutes les variables du niveau racine sont accessibles à l'intérieur des boucles. Ceci étant, il est **fortement recommandé** d'adopter une convention simple et très utile : **ajouter le suffixe `_g`* aux clés**, dans le tableau de données principal (par exemple : *`s_variable_globale_g`*). 
 
-Cette convention du suffixe `_g` est une information active dans **GABS**, elle produit plusieurs effets bénéfiques : 
+Cette convention du suffixe *`_g`* est une information active dans **GABS**, elle produit plusieurs effets bénéfiques : 
 - ✅ **limite les traitements =** résultats plus rapides et efficaces 
 - ✅ **évite les collusions =** permet la maîtrise de l'affichage des données 
 - ✅ **auto-documentation =** facilite grandement le travail sur les gabarits
@@ -525,29 +525,29 @@ $data = array(
 #### Dynamiques ⭐
 
 **Multi-langue**
-**Données PHP :**
 ```php
+// Données PHP
 's_lang' => 'fr'
 ```
-**Gabarit GABS :**
-```html
+```html 
+<!-- Gabarit GABS -->
 {includes/header_{s_lang}.gabs}
 ```
-**Résultat GABS :**
-```html
+```html 
+<!-- Résultat GABS -->
 {includes/header_fr.gabs}
 ```
 **Thèmes**
-**Données PHP :**
-```php
+```php 
+// Données PHP 
 's_theme' => 'dark'
 ```
-**Gabarit GABS :**
-```html
+```html 
+<!-- Gabarit GABS -->
 {includes/styles/{s_theme}/main.gabs}
 ```
-**Résultat GABS :**
 ```html
+<!-- Résultat GABS -->
 {includes/styles/dark/main.gabs}
 ```
 
