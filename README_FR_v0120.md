@@ -952,7 +952,7 @@ Ajouter *`_g`* en fin de clé, cela indique à **GABS** que la variable devient 
 - 🤖 Claude-IA (Anthropic) — architecture, débogage, documentation 
 - 🤖 Gemini-IA (Google) — analyses, suggestions, exemples 
 - 🤖 Divers assistants IA — informations, recherches, brainstorming 
-- 🌐 StackOverflow, php.net, MDN, regex101 and the PHP community
+- 🌐 StackOverflow, php.net, MDN, regex101 et la communauté PHP 
 
 ---
 
