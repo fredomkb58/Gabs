@@ -183,13 +183,13 @@ echo $gabs->get('template.gabs', $data);
 
 ### Variables
 
-```html
+```html GABS template
 <h1>{s_title}</h1>
 <p>Price: {n_price}$</p>
 ```
 
 **Data:**
-```php
+```php PHP datas
 $data = array(
     's_title' => 'My Product',
     'n_price' => 29.99
