@@ -470,7 +470,7 @@ Affichage : 11 à 20 sur 150 (Page 2)
 
 #### Variables globales dans les boucles *`_g`*
 
-Par défaut, toutes les variables du niveau racine sont accessibles à l'intérieur des boucles. Ceci étant, il est **fortement recommandé** d'adopter une convention simple et très utile : **ajouter le suffixe `_g`* aux clés**, dans le tableau de données principal (par exemple : *`s_variable_globale_g`*). 
+Par défaut, toutes les variables du niveau racine sont accessibles à l'intérieur des boucles. Ceci étant, il est **fortement recommandé** d'adopter une convention simple et très utile : **ajouter le suffixe *`_g`* aux clés**, dans le tableau de données principal (par exemple : *`s_variable_globale_g`*). 
 
 Cette convention du suffixe *`_g`* est une information active dans **GABS**, elle produit plusieurs effets bénéfiques : 
 - ✅ **limite les traitements =** résultats plus rapides et efficaces 
