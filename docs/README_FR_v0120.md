@@ -1,6 +1,6 @@
 <div align="center">
 
-![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/Gabs-Logo-Blanc-256.svg)
+![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/medias/Gabs-Logo-Blanc-256.svg)
 
 # GABS
 
@@ -958,7 +958,7 @@ Ajouter *`_g`* en fin de clé, cela indique à **GABS** que la variable devient 
 
 <div align="center">
 
-![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/Gabs-Logo-Blanc-256.svg)
+![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/medias/Gabs-Logo-Blanc-256.svg)
 
 # GABS
 
