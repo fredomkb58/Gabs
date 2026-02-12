@@ -1,7 +1,7 @@
 <?php
 /**
  * Gabs
- * @version		0118 - PHP 5.6+ 
+ * @version		0120 - PHP 5.6+ 
  * @role		Moteur de gabarits Php-Html - Php-Html Template Engine 
  * @slogan		{ logique sans bruit && design sans echo } 
  * 				{ logic without noise && design without echo } 
@@ -13,13 +13,15 @@
 class Gabs
 {
 	private $aTools = array();
-	private $aConfs = array('cach'=>true, 'dbug'=>true, 'escp'=>true, 'pure'=>true, 'hide'=>true, 'incs'=>true, 'bool'=>true, 'arrs'=>true, 'info'=>true, 'glob'=>true, 'sort'=>'&#47;&#92;|&#92;&#47;', 'fold'=>'cache', 'tpls'=>'',); 	
+	private $aConfs = array( 'cach'=>true, 'dbug'=>true, 'escp'=>true, 'pure'=>true, 'hide'=>true, 'incs'=>true, 'bool'=>true, 'arrs'=>true, 'info'=>true, 'glob'=>true, 'sort'=>'&#47;&#92;|&#92;&#47;', 'fold'=>'cache', 'tpls'=>'', ); 
 	private $aTemps = array();
+	private $aFuncs = array();
 
+	// Constructeur
 	public function __construct($sL='{', $sR='}', $sG='[', $sD=']') {
         list($sM, $sE, $sS) = array('`', '|', '!');
 		list($sK, $sV, $sC, $sB) = array('k','v','c','_');
-		list($pL, $pR, $pG, $pD) = array(preg_quote($sL,$sM), preg_quote($sR,$sM), preg_quote($sG,$sM), preg_quote($sD,$sM));
+		list($pL, $pR, $pG, $pD, $pE) = array(preg_quote($sL,$sM), preg_quote($sR,$sM), preg_quote($sG,$sM), preg_quote($sD,$sM), preg_quote($sE,$sM));
 		$aTypes = array('s_','c_','n_','h_','b_','a_');
         $this->aTools = array(
             'tags' => array('brce'=>array($sL, $sR), 'brck'=>array($sG, $sD)),
@@ -33,20 +35,24 @@ class Gabs
             'list' => array(array($sL.$sK.$sR, $sL.$sV.$sR, $sL.$sC.$sR), array($sL.$sK.$sR, $sL.$sC.$sR)),
             'loop' => array($sK, $sV, $sC),
             'info' => array('b','f','n','t','p','s'),
-            'chng' => array('raws'=>$sE, 'sort'=>$sS, 'loop'=>$sL.$sV.$sE.$sR),
+            'vars' => array($sM.$pL, $pE.'?([\w\-'.$pE.']+)?'.$pE.'?'.$pR.$sM.'S'),
+            'chng' => array('raws'=>$sE, 'sort'=>$sS, 'loop'=>$sL.$sV.$sE.$sR, 'vars'=>$sE.$sR,),
             'type' => array('escp'=>array_slice($aTypes, 0, 3), 'raws'=>array_slice($aTypes, 3)),
             'glob' => '_g',
             'hide' => array(
-            	$sM.$pL.'[\w\-\/\.]+?\|?'.$pR.$sM.'S', 
+            	$sM.$pL.'[\w\-\/\.]+?'.$pE.'?([\w\-'.$pE.']+)?'.$pE.'?'.$pR.$sM.'S', 
             	$sM.$pL.'[\w\-]+?'.$pL.'!?('.$pG.')?((-?\d+?)'.$pG.')?'.$sM.'S', 
             	$sM.'('.$pD.'(-?\d+?))?('.$pD.')?'.$pR.'[\w\-]+?'.$pR.$sM.'S', 
             	$sM.$pR.'[\w\-]+?'.$pL.$sM.'S', 
             ),
             'dbug' => array('escp'=>$sB, 'raws'=>$sB.$sE, 'test'=>array($sL.$sB.$sR, $sL.$sB.$sE.$sR)),
         );
+        $this->aTemps = array();
+        $this->aFuncs = array();
 	} 
 
-	public function get($sTemp, $aData) {
+	// get - fonction publique principale
+	public function get($sTemp, $aData, $aFuncs = array()) {
 		if ( empty($sTemp) ) { return ''; }
 		if ( empty($aData) ) { return $sTemp; }
 		$bIncs = $this->aConfs['incs'];
@@ -61,6 +67,7 @@ class Gabs
 			$sPath = $sFold.'/'.$sFile;
 			if ( is_file($sPath) ) { return file_get_contents($sPath); }
 		} 
+		if (!empty($aFuncs)) { $this->aFuncs = $aFuncs; }
 		$sOrig = ($bDbug) ? $sTemp : '';
 		$this->aTemps = array('glob'=>array());
 		$aData = $this->_getPrep_a($aData);
@@ -80,10 +87,13 @@ class Gabs
 		return $sTemp;
 	}
 
-	public function conf( $aConf=array(), 
+	// conf - fonction publique pour régler les paramètres des traitements
+	public function conf(
+		$aConf=array(), 
 		$bCach=true, $bDbug=true, $bEscp=true, $bPure=true, $bHide=true, 
 		$bIncs=true, $bBool=true, $bArrs=true, $bInfo=true, $bGlob=true, 
-		$sSort='&#47;&#92;|&#92;&#47;', $sFold='cache', $sTpls='') {
+		$sSort='&#47;&#92;|&#92;&#47;', $sFold='cache', $sTpls='')
+	{
 		if ( empty($aConf) ) {			
 	        $this->aConfs = array(
 	            'cach' => (bool)$bCach,					// cache activé - is cache active 
@@ -105,17 +115,19 @@ class Gabs
 			$aText = array('sort', 'fold', 'tpls');
 			$sText = '_'.implode('_', $aText).'_';
 			foreach ( $aConf as $sKey => $uVal ) { 
-				if ( in_array($sKey, $aKeys) ) { 
-					$this->aConfs[$sKey] = ($this->_getIsFind_b($sText, $sKey)) ? rtrim((string)$uVal, '/') : (bool)$uVal; 
+				if ( in_array($sKey, $aKeys) ) {
+					$this->aConfs[$sKey] = ($this->_getIsFind_b($sText, $sKey)) ? rtrim((string)$uVal, '/') : (bool)$uVal;
 				}
 			}
 		}
 	} 
 
+	// getTemp - lecture et/ou retour du contenu du gabarit
 	private function _getTemp_s($sTemp) {
 		return is_file($sTemp) ? file_get_contents($sTemp) : $sTemp;
 	}
 
+	// getIncs - traite les inclusions et retourne le gabarit brut modifié
 	private function _getIncs_s($sTemp) {
 		if ( !preg_match_all( $this->aTools['incs'], $sTemp, $aRes, PREG_SET_ORDER )) { return $sTemp; }
 	    $sBase = (empty($this->aConfs['tpls'])) ? realpath('./') : realpath('./'.$this->aConfs['tpls']);
@@ -128,6 +140,7 @@ class Gabs
 		return $sTemp;
 	}
 
+	// getPrep - Préparation des données pour les remplacements (parsing)
     private function _getPrep_a($aData) {
         if ( $this->aConfs['bool'] || $this->aConfs['arrs'] ) {
 	        uksort($aData, function($sKey1, $sKey2) use ($aData) {
@@ -141,20 +154,24 @@ class Gabs
 	    return $aData;
     }
 
+    // getParse - parsage et construction du gabarit final
     private function _getParse_s($sTemp, $aData) {
         foreach ( $aData as $sTag => $uVal ) {
             if ( !$this->_getIsFind_b($sTemp, $this->aTools['tags']['brce'][0].$sTag) ) { continue; }
             if ( is_array($uVal) && $this->aConfs['arrs'] ) {
                 $sTemp = $this->_getArrs_s($sTag, $uVal, $sTemp);
-            } elseif ( is_bool($uVal) && $this->aConfs['bool'] ) {
+            }
+            elseif ( is_bool($uVal) && $this->aConfs['bool'] ) {
                 $sTemp = $this->_getBool_s($sTag, $uVal, $sTemp);
-            } else {
+            } 
+            else {
                 $sTemp = $this->_getVars_s($sTag, $uVal, $sTemp);
             }
         }
         return $sTemp;
     }
 
+    // getBool - traite les conditions booléenes et retourne le gabarit modifié
     private function _getBool_s($sTag, $bVal, $sTemp) {
         if (preg_match_all( implode($sTag, $this->aTools['vrai']), $sTemp, $aRes, PREG_SET_ORDER )) {
             $nNro = ($bVal) ? 1 : 2;
@@ -171,6 +188,7 @@ class Gabs
         return $sTemp;
     }
 
+    // getBoolPart - traitement des parties d'un bloc conditionnel
     private function _getBoolPart_s($aRes, $nNro, $sTemp) {
         foreach ( $aRes as $aItm ) {
         	$sRemp = (isset($aItm[$nNro])) ? $aItm[$nNro] : '';
@@ -179,12 +197,14 @@ class Gabs
         return $sTemp;
     }
 
-	private function _getArrs_s($sTag, $aData, $sTemp, $sRemp='') {
+    // getArrs - traitement des tableaux (boucles)
+	private function _getArrs_s($sTag, $aData, $sTemp, $sRemp = '') {
 		if (!preg_match_all( implode($sTag, $this->aTools['arrs']), $sTemp, $aRes, PREG_SET_ORDER )) { return $sTemp; }
 		if (empty($this->aTemps['glob'])) { $this->aTemps['glob'] = $this->_getGlob_a($aData); }
 		$nItm = 0;
 		foreach ( $aRes as $aItm ) {
-			$aVal = $aData; $nTot = count($aData); $nDbt = 0; $nLng = count($aVal); $nItm++; $nCnt = 1; $aRemp = array();
+			$aVal = $aData; $nTot = count($aData); $nDbt = 0; $nLng = count($aVal); $nItm++; $nCnt = 1;
+			$aRemp = array();
 			$bArrSort = $this->_getIsFind_b($aItm[0], $sTag.$this->aTools['tags']['brce'][0].$this->aTools['chng']['sort']);
 			if ($bArrSort) { $aVal = array_reverse($aVal); }
 			$aItm[1] = ($bArrSort) ? mb_substr($aItm[1], 1) : $aItm[1];
@@ -208,9 +228,11 @@ class Gabs
 				}
 			}
 			$sTemp = str_replace($aItm[0], implode('', $aRemp), $sTemp);
-			if ( $this->aConfs['info'] ) {				
+			if ( $this->aConfs['info'] ) { 
 				$aLabls = array();
-				foreach ( $this->aTools['info'] as $sInfo ) { $aLabls[] = implode($sTag.'_'.$nItm.'_'.$sInfo, $this->aTools['tags']['brce']); }
+				foreach ( $this->aTools['info'] as $sInfo ) { 
+					$aLabls[] = implode($sTag.'_'.$nItm.'_'.$sInfo, $this->aTools['tags']['brce']); 
+				}
 				$aInfos = $this->_getLoopInfos_a($nTot, $nDbt, $nLng);
 				$aIndic = explode('|', $this->aConfs['sort']);
 				$aInfos[] = ($bArrSort || $bSelSort) ? $aIndic[1] : $aIndic[0];
@@ -220,6 +242,7 @@ class Gabs
 		return $sTemp;
 	}
 
+	// getGlob - Fonction pour récupérer toutes les données scalaires globales 
 	private function _getGlob_a($aData) {
         $nScal = 0;
         foreach ($aData as $key => $val) { if (is_array($val)) { $nScal++; } else { break; } }
@@ -229,22 +252,47 @@ class Gabs
     		$aGlob = array();
     		foreach ($aScal as $k => $v) { if (substr($k, -2, 2) === $this->aTools['glob']) { $aGlob[$k] = $v; } }
     		return $aGlob;
-    	} 
-    	return $aScal;
+    	}
+		return $aScal;
 	}
 
+	// getVars - traitement des variables nomées 
 	private function _getVars_s($sTag, $sVal, $sTemp) {
-		$bEscp = (bool)$this->aConfs['escp'];
+		if (!preg_match_all( implode($sTag, $this->aTools['vars']), $sTemp, $aRes, PREG_SET_ORDER )) { return $sTemp; }
+		$bEscp = (bool)$this->aConfs['escp']; 
 		$bTypeRaws = (bool)(in_array(substr($sTag,0,2), $this->aTools['type']['raws'])); 
-		$bChngRaws = $this->_getIsFind_b($sTemp, implode($sTag.$this->aTools['chng']['raws'], $this->aTools['tags']['brce'])); 
-		$sChng = ($bChngRaws) ? $this->aTools['chng']['raws'] : '';
-		if ( !$bEscp || $bTypeRaws || $bChngRaws ) {
-			return str_replace(implode($sTag.$sChng, $this->aTools['tags']['brce']), (string)$sVal, $sTemp);
-		} else {
-			return str_replace( implode($sTag.$sChng, $this->aTools['tags']['brce']), $this->_getEscp_s($sVal), $sTemp );
+		foreach ( $aRes as $aItm ) {
+			$sValue = (string)$sVal; $aFuncErr = array();
+			$bChngRaws = $this->_getIsFind_b($aItm[0], $this->aTools['chng']['vars']); 
+			if (isset($aItm[1])) {
+				$aFuncs = array_filter(explode($this->aTools['chng']['raws'], $aItm[1]));
+				if (empty($this->aFuncs)) {
+					if ($this->aConfs['dbug']) { $aFuncErr = $aFuncs; }
+				} else {
+					foreach ($aFuncs as $sFunc) {
+					    if (isset($this->aFuncs[$sFunc])) {
+					    	$oFunc = $this->aFuncs[$sFunc];
+					        $sValue = $oFunc($sValue);
+					    } else {
+					    	if ($this->aConfs['dbug']) { $aFuncErr[] = $sFunc; }
+					    }
+					}
+				}
+			}
+			if ($this->aConfs['dbug'] && !empty($aFuncErr)) {
+				$sFuncErr = '<!-- '.implode($this->aTools['chng']['raws'], $aFuncErr).' -->';
+				$sTemp = str_replace( $aItm[0], $aItm[0].$sFuncErr, $sTemp );
+			}
+			if ( !$bEscp || $bTypeRaws || $bChngRaws ) {
+				$sTemp = str_replace( $aItm[0], $sValue, $sTemp );
+			} else {
+				$sTemp = str_replace( $aItm[0], $this->_getEscp_s($sValue), $sTemp );
+			}
 		}
+		return $sTemp;
 	}
 
+	// getDbug - traitement et insertion des données de débogage dans le gabarit
 	private function _getDbug_s($sOrig, $aData, $sTemp) {
 		$sEscp = implode($this->aTools['dbug']['escp'], $this->aTools['tags']['brce']);
 		$sRaws = implode($this->aTools['dbug']['raws'], $this->aTools['tags']['brce']);
@@ -260,6 +308,7 @@ class Gabs
 		return $sTemp;
 	}
 
+	// setPureCaches - Fonction pour purifier (supprimer) les fichiers et dossiers de cache obsolètes
 	private function _setPureCaches_n($sFold, $nFiles=5, $nProbs=100) {
 	    if (!is_dir($sFold)) { return 0; }
 	    if (rand(1, $nProbs) !== 1) { return 0; }
@@ -268,10 +317,11 @@ class Gabs
 	    usort($aFiles, function($a, $b) { return filemtime($b) - filemtime($a); });
 	    $aDel = array_slice($aFiles, $nFiles); $nDel = 0;
 	    foreach ($aDel as $sFile) { if (@unlink($sFile)) { $nDel++; } }
-        if (count(glob($sFold.'/*')) === 0) { @rmdir($sFold); }
+        if (count(glob($sFold.'/*')) === 0) {  @rmdir($sFold); }
 	    return $nDel;
 	}
 
+	// setHide - Fonction pour masquer (commenter) toutes les balises horphélines du gabarit
 	private function _setHide_a($sTemp) {
 		foreach ($this->aTools['hide'] as $sMask) {
 			if (preg_match_all( $sMask, $sTemp, $aRes, PREG_SET_ORDER )) {
@@ -285,6 +335,7 @@ class Gabs
 		return $sTemp;
 	}
 
+	// getLoopInfos - Helper : Informations numériques sur l'affichage des boucles
 	private function _getLoopInfos_a($nTot, $nDbt, $nLng) {
 	    $nTot  = max(0, (int)$nTot); $nDbt = (int)$nDbt; $nLng = (int)$nLng;
 	    if ($nDbt >= 0) { $nSta = $nDbt; } else { $nSta = $nTot + $nDbt; }
@@ -292,14 +343,16 @@ class Gabs
 	    $nSta = max(0, min($nSta, $nTot));
 	    $nEnd   = max($nSta, min($nEnd, $nTot));
 	    $nNbr = $nEnd - $nSta; $nPge = 1;
-	    if ($nNbr > 0 && $nLng > 0) {  $nPge = floor($nSta / $nNbr) + 1; }
+	    if ($nNbr > 0 && $nLng > 0) { $nPge = floor($nSta / $nNbr) + 1; }
 	    return array($nSta+1,$nEnd,$nNbr,$nTot,$nPge);
 	}
 
+	// getEscp - Helper : protège les textes XSS et converti les balises Gabs en entités Html
 	private function _getEscp_s($sVal) {
 		return str_replace( $this->aTools['html']['tags'], $this->aTools['html']['html'], htmlspecialchars((string)$sVal, ENT_QUOTES, 'UTF-8') );
 	}
 
+	// getIsFind - Helper : recherche texte dans texte : est-ce que sFind existe dans sCont ?
 	private function _getIsFind_b($sCont, $sFind) {
 		return (bool)(strpos($sCont, $sFind) !== false);
 	}
