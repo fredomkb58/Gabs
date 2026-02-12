@@ -1,6 +1,6 @@
 <div align="center">
 
-![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/Gabs-Logo-Blanc-256.svg)
+![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/medias/Gabs-Logo-Blanc-256.svg)
 
 # GABS
 
@@ -959,7 +959,7 @@ Adding *`_g`* at the end of a key tells **GABS** that the variable becomes globa
 
 <div align="center">
 
-![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/Gabs-Logo-Blanc-256.svg)
+![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/medias/Gabs-Logo-Blanc-256.svg)
 
 # GABS
 
