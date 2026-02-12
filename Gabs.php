@@ -1,7 +1,7 @@
 <?php
 /**
  * Gabs
- * @version		0118 - PHP 5.6+ 
+ * @version		0120 - PHP 5.6+ 
  * @role		Moteur de gabarits Php-Html - Php-Html Template Engine 
  * @slogan		{ logique sans bruit && design sans echo } 
  * 				{ logic without noise && design without echo } 
@@ -18,8 +18,9 @@
  * 		- Valeurs booléennes binaires, blocs conditionnels simples : {bool{ …si vrai… }bool{ …si faux… }bool}, 
  * 		- Listes et tableaux (boucles, array = loop) : {tableau{ …contenu… }tableau} 
  * 		- Inclusions statiques et dynamiques d'autres gabarits ou codes : {inclusions/gabarit.gabs} 
- * 	- Variables globales eccesibles dans les boucles, deux modes (configurable) : stricte (suffixe '_g') et générale 
+ * 	- Variables globales accessibles dans les boucles, deux modes (configurable) : stricte (suffixe '_g') et générale 
  * 	- Les variables correspondent aux clés (key) du tableau de données fourni 
+ *  - Les variables peuvent être modifiées via un système de fonctions-filtres personnalisés : {s_var|f_filtre}  
  *  - Protection automatique des données sensibles (échappement par défaut avec 'htmlspecialchars()') 
  *  - Personnalisation de la configuration très simple et granulaire (fonctions, traitements, chemins, etc.) 
  *  - Informations pour les boucles (début, fin, nombre, total, page et indicateur de tri)  
@@ -41,7 +42,8 @@
  * 		- Static and dynamic inclusions of other templates or codes: {inclusions/gabarit.gabs} 
  * 	- Global variables accessible in loops, two modes (configurable): strict (suffix '_g') and general 
  * 	- The variables correspond to the keys in the provided array data 
- *  - Automatic protection of sensitive data (deault escape by'htmlspecialchars()') 
+ * 	- The variables can be modified via a system of custom filter functions: {s_var|f_filtre}  
+ *  - Automatic protection of sensitive data (default escape by'htmlspecialchars()') 
  *  - Very simple and granular configuration customization (functions, processes, paths, etc.) 
  *  - Information for loops (begin, finish, number, total, page and sort indicator) 
  * 	- Caching system based on each processed template and the provided data (95% faster) 
@@ -50,7 +52,7 @@
  *  - Recommended practical naming convention for naming data table keys 
  *  - IMPORTANT: Data must be provided already formatted (dates, numbers, URLs, paths, conversions, encodings, etc.). 
  * ----------
- * Avec l'aide de : Claude-AI, Gemini-AI, Mistral-AI, ChatGPT-AI, Perplexity-AI, StackOverflow, php.net, w3schools, Mdn_, CodePen, GitHub, GitLab, developpez.com, regex101.com, onlinephp.io, Wikipedia, etc…
+ * Crédits : Claude-AI, Gemini-AI, Mistral-AI, ChatGPT-AI, Perplexity-AI, StackOverflow, php.net, w3schools, Mdn_, CodePen, GitHub, GitLab, developpez.com, regex101.com, onlinephp.io, Wikipedia, etc…
  * ----------
 **/
 
@@ -85,12 +87,17 @@ class Gabs
 	 **/
 	private $aTemps = array();
 
+	/**
+	 * @aFuncs	array		Les fonctions personnalisées - Custom functions  
+	 **/
+	private $aFuncs = array();
+
 	/*----------------------------------------------------------------------*/
 
 	/**
 	 * Constructeur
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sL		string		Délimiteur 'gauche' (left) des balises des variables - Delimiter 'left' vars tags
 	 * @param		sR		string		Délimiteur 'droite' (right) des balises des variables - Delimiter 'right' vars tags
 	 * @param		sG		string		Délimiteur 'gauche' des balises des items - Delimiter 'left' of items tags
@@ -101,7 +108,7 @@ class Gabs
 	 * 						- Les délimiteurs par accolades "{" et "}" (brce) sont utilisés pour les variables, 
 	 * 							les condition booléennes binaires et les tableaux de données.
 	 * 						- Les délimiteurs par crochets "[" et "]" (brck) sont utilisés pour définir les éléments 
-	 * 							des blocs booléens courts et la sélection d'itmes des tableaux de données à afficher 
+	 * 							des blocs booléens courts et la sélection d'items des tableaux de données à afficher 
 	 * 							(voir les descriptions de la fonction "_getBool_s" et de la fonction "_getArrs_s").
 	 * 
 	 * 					Conventions de nommage des clés du tableau général des données à fournir :
@@ -124,7 +131,7 @@ class Gabs
 	 * 							= pour faire un tri inverse d'un tableau ou de la séléction d'items 
 	 * 							= to perform a reverse sort of an array or a selection of items 
 	 * 
-	 * 					Balises spéciles - Special tags :
+	 * 					Balises spéciales - Special tags :
 	 * 						- $sK = 'k' = {k} = la clé d'un item de tableau - the key to an array item
 	 * 						- $sV = 'v' = {v} = la valeur d'un item de tableau - the value of an array item
 	 * 						- $sC = 'c' = {c} = le compteur d'un item de tableau - the counter of an array item
@@ -142,7 +149,7 @@ class Gabs
 	{
         list($sM, $sE, $sS) = array('`', '|', '!');
 		list($sK, $sV, $sC, $sB) = array('k','v','c','_');
-		list($pL, $pR, $pG, $pD) = array(preg_quote($sL,$sM), preg_quote($sR,$sM), preg_quote($sG,$sM), preg_quote($sD,$sM));
+		list($pL, $pR, $pG, $pD, $pE) = array(preg_quote($sL,$sM), preg_quote($sR,$sM), preg_quote($sG,$sM), preg_quote($sD,$sM), preg_quote($sE,$sM));
 		$aTypes = array('s_','c_','n_','h_','b_','a_');
         $this->aTools = array(
             'tags' => array('brce'=>array($sL, $sR), 'brck'=>array($sG, $sD)),
@@ -156,17 +163,20 @@ class Gabs
             'list' => array(array($sL.$sK.$sR, $sL.$sV.$sR, $sL.$sC.$sR), array($sL.$sK.$sR, $sL.$sC.$sR)),
             'loop' => array($sK, $sV, $sC),
             'info' => array('b','f','n','t','p','s'),
-            'chng' => array('raws'=>$sE, 'sort'=>$sS, 'loop'=>$sL.$sV.$sE.$sR),
+            'vars' => array($sM.$pL, $pE.'?([\w\-'.$pE.']+)?'.$pE.'?'.$pR.$sM.'S'),
+            'chng' => array('raws'=>$sE, 'sort'=>$sS, 'loop'=>$sL.$sV.$sE.$sR, 'vars'=>$sE.$sR,),
             'type' => array('escp'=>array_slice($aTypes, 0, 3), 'raws'=>array_slice($aTypes, 3)),
             'glob' => '_g',
             'hide' => array(
-            	$sM.$pL.'[\w\-\/\.]+?\|?'.$pR.$sM.'S', 
+            	$sM.$pL.'[\w\-\/\.]+?'.$pE.'?([\w\-'.$pE.']+)?'.$pE.'?'.$pR.$sM.'S', 
             	$sM.$pL.'[\w\-]+?'.$pL.'!?('.$pG.')?((-?\d+?)'.$pG.')?'.$sM.'S', 
             	$sM.'('.$pD.'(-?\d+?))?('.$pD.')?'.$pR.'[\w\-]+?'.$pR.$sM.'S', 
             	$sM.$pR.'[\w\-]+?'.$pL.$sM.'S', 
             ),
             'dbug' => array('escp'=>$sB, 'raws'=>$sB.$sE, 'test'=>array($sL.$sB.$sR, $sL.$sB.$sE.$sR)),
         );
+        $this->aTemps = array();
+        $this->aFuncs = array();
 	} 
 
 	/*----------------------------------------------------------------------*/
@@ -174,13 +184,13 @@ class Gabs
 	/**
 	 * get - fonction publique principale
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sTemp		string		Chemin ou contenu du template - File path or contents code of template
 	 * @param		aData		array		Tableau de données à insérer dans le template - Array datas to insert into the template
 	 * @return		sTemp		string		Gabarit final à retourner après traitement - The result template to return after parsing
 	 * 
 	 * @descriptions	C'est la fonction publique principale qui se charge de construire le gabarit, 
-	 * 					en y insérant les donnéesfournies pour retourner le résultat final 
+	 * 					en y insérant les données fournies pour retourner le résultat final 
 	 * 					au script appelant qui se chargera de l'afficher. 
 	 * 
 	 * 					Structure sur 5 étapes principales : 
@@ -190,9 +200,9 @@ class Gabs
 	 * 						4. On lance les inclusions dynamiques, puis on mémorise le résultat final dans un nouveau cache
 	 * 						5. Enfin, on génère les données de débogage et on returne le résultat final pour affichage 
 	 **/
-	public function get($sTemp, $aData)
+	public function get($sTemp, $aData, $aFuncs = array())
 	{
-		// Si quelque chose manque, on arrâte tout 
+		// Si quelque chose manque, on arrête tout 
 		if ( empty($sTemp) ) { return ''; }
 		if ( empty($aData) ) { return $sTemp; }
 
@@ -220,6 +230,11 @@ class Gabs
 				return file_get_contents($sPath);
 			}
 		} 
+
+		// On charge les fonctions-filtres personnalisés 
+		if (!empty($aFuncs)) {
+			$this->aFuncs = $aFuncs;
+		}
 
 		// On mémorise le gabarit original complet (pour débogage)
 		$sOrig = ($bDbug) ? $sTemp : '';
@@ -272,12 +287,12 @@ class Gabs
 	/**
 	 * conf - fonction publique pour régler les paramètres des traitements
 	 *  
-	 * @version		0118
+	 * @version		0120
 	 * @param		aConf		array		Configuration par clé => valeur - Configuration by key => value 
 	 * @param		bCach		boolean		Faut-il gérer les fichiers cache ? - Should we manage cache files?
 	 * @param		bDbug		boolean		Faut-il retourner la liste des données pour débogage ? - Should the data list be returned for debugging?
 	 * @param		bEscp		boolean		Faut-il appliquer l'échappement automatique des données ? - Should automatic data escaping be applied?
-	 * @param		bPure		boolean		Faut-il purifier (supprimer) les caches obsolètes ? - SShould we clear (delete) outdated caches?
+	 * @param		bPure		boolean		Faut-il purifier (supprimer) les caches obsolètes ? - Should we clear (delete) outdated caches?
 	 * @param		bHide		boolean		Faut-il masquer toutes les balises orphélines ? - Should all orphaned tags be hidden?
 	 * @param		bIncs		boolean		Faut-il traiter les balises d'inclusion ? - Should we treat the inclusion tags?
 	 * @param		bBool		boolean		Faut-il traiter les balises des conditions booléennes ? - Should we treat Boolean condition tags?
@@ -314,7 +329,7 @@ class Gabs
 	 * 							'pure'		(int)(bool) 		activation de la purification auto des caches 
 	 * 							'hide'		(int)(bool) 		activation du masquage des balises orphélines  
 	 * 							'incs'		(int)(bool) 		activation des inclusions statiques et dynamiques 
-	 * 							'bool'		(int)(bool) 		activation des blocs conditionnels binnaires 
+	 * 							'bool'		(int)(bool) 		activation des blocs conditionnels binaires 
 	 * 							'arrs'		(int)(bool) 		activation des boucles sur les tableaux 
 	 * 							'info'		(int)(bool)			activation des infos des boucles 
 	 * 							'glob'		(int)(bool)			activation des globales des boucles avec suffixe '_g' 
@@ -349,8 +364,8 @@ class Gabs
 	 * 							Si cette option 'glob' est fausse (false), alors toutes les données scalaires seront 
 	 * 							disponibles par défaut comme données globales à l'intérieur des boucles. 
 	 * 								ATTENTION : ce choix de l'option 'glob' = faux (false) peut produit deux effets :
-	 * 									1. une collision potentelle avec les données du tableu de la boucle 
-	 * 									2. un relentissement probable du traitement de chaque boucle 
+	 * 									1. une collision potentielle avec les données du tableau de la boucle 
+	 * 									2. un ralentissement probable du traitement de chaque boucle 
 	 * 						
 	 * 						CONSEIL : si vous souhaitez utiliser des données globales dans le boucles, 
 	 * 							tout en optimisant au mieux tout ces traitemens (plus rapide et moins de risques), 
@@ -400,7 +415,7 @@ class Gabs
 	/**
 	 * getTemp - lecture et/ou retour du contenu du gabarit
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sTemp		string		Chemin ou contenu du template - File path or contents code of template
 	 * @return		data		string		Contenu du template original - Original template contents
 	 **/
@@ -414,7 +429,7 @@ class Gabs
 	/**
 	 * getIncs - traite les inclusions et retourne le gabarit brut modifié
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sTemp		string		Contenu du template - Contents code of template
 	 * @return		sTemp		string		Le nouveau gabarit avec les inculions - The new template with the incisions 
 	 * 
@@ -467,7 +482,7 @@ class Gabs
     /**
      * getPrep - Préparation des données pour les remplacements (parsing) 
      * 
-	 * @version		0118
+	 * @version		0120
      * @param 	aData		array 		$aData Tableau de données
      * @return 	data 		array 		Les données de $aData correctements triées 
 	 * @descriptions	La fonction effectue un tri sur les données pour les préparer dans le bon ordre :
@@ -499,7 +514,7 @@ class Gabs
 	/**
 	 * getParse - parsage et construction du gabarit final
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sTemp		string		Contenu du template - Contents code of template
 	 * @param		aData		array		Tableau de données à insérer dans le template - Array datas to insert into the template
 	 * @return		sTemp		string		Nouveau contenu du template parsé - New parsed template contents
@@ -537,7 +552,7 @@ class Gabs
 	/**
 	 * getBool - traite les conditions booléenes et retourne le gabarit modifié
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sTag		string		Balise à remplacer - Tag to replace
 	 * @param		bVal		bool		Valeur pour choisir le contenu à utiliser - Value to choose content
 	 * @param		sTemp		string		Contenu du template - Contents code of template
@@ -608,7 +623,7 @@ class Gabs
 	/**
 	 * getBoolPart - traitement des parties d'un bloc conditionnel
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		aRes		array		Résultat de recherche "getBool" - Result of "getBool" search
 	 * @param		nNro		number		Le numéro de la partie à retourner - The part number to return
 	 * @param		sTemp		string		Contenu du template - Template contents
@@ -628,7 +643,7 @@ class Gabs
 	/**
 	 * getArrs - traitement des tableaux (boucles)
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sTag		string		Balise à remplacer - Tag to replace
 	 * @param		aVal		array		Variable de remplacement de type array - Replacing array values
 	 * @param		sTemp		string		Contenu du template - Template contents
@@ -899,7 +914,7 @@ class Gabs
     /**
      * getGlob - Fonction pour récupérer toutes les données scalaires globales 
      * 
-	 * @version		0118
+	 * @version		0120
      * @param 	aData		array 		Le tableau de données - The data array 
      * @return 	data 		array 		Le tableau de données modifié - The modified data array
      */
@@ -926,9 +941,8 @@ class Gabs
     			if (substr($k, -2, 2) === $this->aTools['glob']) { $aGlob[$k] = $v; }
     		}
     		return $aGlob;
-    	} else {
-    		return $aScal;
-    	}
+    	} 
+		return $aScal;
 	}
 
 	/*----------------------------------------------------------------------*/
@@ -936,7 +950,7 @@ class Gabs
 	/**
 	 * getVars - traitement des variables
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sTag		string		Balise à remplacer - Tag to replace
 	 * @param		sVal		string		Valeur de remplacement de type string - Replacing string value
 	 * @param		sTemp		string		Contenu du template - Template contents
@@ -946,6 +960,10 @@ class Gabs
 	 * 					La syntaxe à respecter pour utiliser les variables est la suivante :
 	 * 						{s_variable} 
 	 * 					Les noms des variables correspondent aux clés des données transmises au gabarit.
+	 * 
+	 * 					NOTE : Si jamais la variable n'existe pas dans le tableau de données fourni, 
+	 * 						soit par une suppréssion de la valeur ou par un nommage erroné de la variable, 
+	 * 						l'ensemble de la balise sera masquée (commentée) afin de faciliter le débogage.
 	 * 
 	 * 					IMPORTANT : le nom de la variable DOIT toucher les délimiteurs (accolades par défaut)
 	 * 						toute autre syntaxe fera échouer le remplacement par les données correspondantes,
@@ -971,23 +989,79 @@ class Gabs
 	 * 							donnée protégée (avec échappement)
 	 * 
 	 * 					Résumé en pseudo-code :
-	 * 					if ( conf 'esc' == false || type prfx in ('h_','b_','a_') || chng var "|" exist ) ? raw : escape
+	 * 						if ( conf 'esc' == false || type prfx in ('h_','b_','a_') || chng var "|" exist ) ? raw : escape
+	 * 
+	 * 					Cette méthode applique également les fonctions-filtres issues des libraireis :
+	 * 						"libs/funcs_gabs.php" et/ou "libs/funcs_user.php" 
+	 * 						Uniquement si leurs données ont été transmises comme paramètre à GABS. 
+	 * 						Les fonctions-filtres de la librairie "funcs_user.php" sont prioritaires (surcharge).
+	 * 					
+	 * 					Les fonctions-filtres suivent la syntaxe suivante (un seul ou plusieurs enchaînés) :
+	 * 						{s_var|f_filtre} ; {s_var|f_filtre_1|f_filtre_2|f_filtre_3}
+	 * 
+	 * 					CONSEIL : si jamais vous avez souvent besoin d'utiliser plusieurs fonctions-filtres 
+	 * 						enchaînés, il est recommandé d'en faire un seul filtre spécifique dans la
+	 * 						librairie "funcs_user.php", pour n'appliquer qu'une seule fonction et ainsi optimiser 
+	 * 						au mieux ces traitements qui, souvent, sont assez gourmands et qui ont un impact 
+	 * 						réel sur les performanes globales de génération du contenu Html final. 
+	 * 						De plus, remplacer plusieurs filtres enchaînés par un seul, rend la lecture et 
+	 * 						la conception des gabarits bien plus simples et claire.  
+	 * 
+	 * 					NOTE : Si certains filtres ne sont pas trouvés dans la liste des fonctions diponibles, 
+	 * 						un commentaire Html est généré en indiquant le nom des filtres qui ont échoué, 
+	 * 						cela permet un débogage plus efficace en regardant le code source de la page.
+	 * 
+	 * 					IMPORTANT : lors de l'utilisation des fonctions-filtres, pour conserver le changeur 
+	 * 						de valeur brute, il est impératif de l'insérer à la fin de la balise, juste avant le 
+	 * 						délimiteur fermant, collé à lui : {s_var|filtre_1|filtre_2|} = données brutes filtrées 
 	 **/	
 	private function _getVars_s($sTag, $sVal, $sTemp)
 	{
+		if (!preg_match_all( implode($sTag, $this->aTools['vars']), $sTemp, $aRes, PREG_SET_ORDER )) {
+			return $sTemp;
+		}
 		$bEscp = (bool)$this->aConfs['escp'];
 		$bTypeRaws = (bool)(in_array(substr($sTag,0,2), $this->aTools['type']['raws'])); 
-		$bChngRaws = $this->_getIsFind_b($sTemp, implode($sTag.$this->aTools['chng']['raws'], $this->aTools['tags']['brce'])); 
-		$sChng = ($bChngRaws) ? $this->aTools['chng']['raws'] : '';
-		if ( !$bEscp || $bTypeRaws || $bChngRaws ) {
-			return str_replace(implode($sTag.$sChng, $this->aTools['tags']['brce']), (string)$sVal, $sTemp);
-		} else {
-			return str_replace(
-				implode($sTag.$sChng, $this->aTools['tags']['brce']), 
-				$this->_getEscp_s($sVal), 
-				$sTemp
-			);
+
+		// On parcours toutes les balise trouvées dans le gabarit 
+		foreach ( $aRes as $aItm ) {
+			$sValue = (string)$sVal;
+			$aFuncErr = array();
+			$bChngRaws = $this->_getIsFind_b($aItm[0], $this->aTools['chng']['vars']); 
+
+			// Si des fonctions-filtres existent dans la balise, on les applique 
+			if (isset($aItm[1])) {
+				$aFuncs = array_filter(explode($this->aTools['chng']['raws'], $aItm[1]));
+				if (empty($this->aFuncs)) {
+					if ($this->aConfs['dbug']) { $aFuncErr = $aFuncs; }
+				} else {
+					foreach ($aFuncs as $sFunc) {
+					    if (isset($this->aFuncs[$sFunc])) {
+					    	$oFunc = $this->aFuncs[$sFunc];
+					        $sValue = $oFunc($sValue);
+					    } else {
+					    	if ($this->aConfs['dbug']) { $aFuncErr[] = $sFunc; }
+					    }
+					}
+				}
+			}
+
+			// On génère un commentaire Html avec le nom des filtres qui ont échoué 
+			if ($this->aConfs['dbug'] && !empty($aFuncErr)) {
+				$sFuncErr = '<!-- '.implode($this->aTools['chng']['raws'], $aFuncErr).' -->';
+				$sTemp = str_replace( $aItm[0], $aItm[0].$sFuncErr, $sTemp );
+			}
+
+			// On remplace la balise dans le gabarit par la valeur brute ou échappée 
+			if ( !$bEscp || $bTypeRaws || $bChngRaws ) {
+				$sTemp = str_replace( $aItm[0], $sValue, $sTemp );
+			} else {
+				$sTemp = str_replace( $aItm[0], $this->_getEscp_s($sValue), $sTemp );
+			}
 		}
+
+		// Retour du gabarit modifié 
+		return $sTemp;
 	}
 
 	/*----------------------------------------------------------------------*/
@@ -995,7 +1069,7 @@ class Gabs
 	/**
 	 * getDbug - traitement et insertion des données de débogage dans le gabarit 
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sOrig		string		Le gabarit original complet - The complete original template
 	 * @param		aData		array		Le tableau de données - The data table
 	 * @param		sTemp		string		Contenu du template - Template contents
@@ -1035,7 +1109,7 @@ class Gabs
     /**
      * setPureCaches - Fonction pour purifier (supprimer) les fichiers et dossiers de cache obsolètes 
      * 
-	 * @version		0118
+	 * @version		0120
      * @param 	sFold		string 		Chemin vers le dossier des caches - Path to cache folder 
      * @param 	nFiles		integer		Nombre de fichiers à conserver - Number of files to keep 
      * @param 	nProbs		integer		Pourcentage de probabilités de nettoyage - Percentage probability of cleaning 
@@ -1077,7 +1151,7 @@ class Gabs
     /**
      * setHide - Fonction pour masquer (commenter) toutes les balises horphélines du gabarit   
      * 
-	 * @version		0118
+	 * @version		0120
      * @param 	sTemp		string 		La gabarit à nettoyer  
      * @return 	data 		string 		Le gabarit nettoyé  
 	 * @description		Cette fonction tente de masquer (commenter) toutes les balises GABS
@@ -1088,6 +1162,9 @@ class Gabs
 	 * 					tout en permettant des les voir dans le code source de la page pour 
 	 * 					faciliter le travail de débogage par l'intégrateur.
 	 * 
+	 * 					Saules les éventuelles balises de débogage '{_}' et/ou '{_|}' présentes 
+	 * 					dans la gabarit sont conservées en l'état.
+	 *   
 	 * 					IMPORTANT : ce masquage s'applique à tout le contenu du gabarit, 
 	 * 						si jamais il y avait des textes comportant une syntaxe similaire 
 	 * 						aux principales balises de GABS, il est très probable qu'ils soient 
@@ -1122,7 +1199,7 @@ class Gabs
     /**
      * getLoopInfos - Helper : Informations numériques sur l'affichage des boucles  
      * 
-	 * @version		0118
+	 * @version		0120
      * @param 	nTot		number 		Le nombre total d'items du tableau 
      * @param 	nDbt		number 		Le numéro d'index de début de séléction  
      * @param 	nLng		number 		Le nombre d'items à sélectionner (longueur)  
@@ -1159,7 +1236,7 @@ class Gabs
 	/**
 	 * getEscp - Helper : protège les textes XSS et converti les balises Gabs en entités Html 
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sVal		string		Le texte à protéger - The text to protect
 	 * @return		data		string		Vrai si texte existe, sinon faux - True if text exists, otherwise false
 	 * @description		Cette méthode protège les valeurs issus du tableau des données, pour éviter surtout 
@@ -1180,7 +1257,7 @@ class Gabs
 	/**
 	 * getIsFind - Helper : recherche texte dans texte : est-ce que sFind existe dans sCont ?
 	 *
-	 * @version		0118
+	 * @version		0120
 	 * @param		sCont		string		Le texte conteneur - The container text
 	 * @param		sFind		string		Le texte à trouver - The text to find
 	 * @return		data		boolean		Vrai si texte existe, sinon faux - True if text exists, otherwise false
