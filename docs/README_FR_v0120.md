@@ -470,9 +470,13 @@ Affichage : 11 à 20 sur 150 (Page 2)
 
 #### Variables globales dans les boucles *`_g`*
 
-Par défaut, toutes les variables du niveau racine sont accessibles à l'intérieur des boucles. Ceci étant, il est **fortement recommandé** d'adopter une convention simple et très utile : **ajouter le suffixe *`_g`* aux clés**, dans le tableau de données principal (par exemple : *`s_variable_globale_g`*). 
+**GABS** autorise l'accès aux variables du niveau racine directement à l'intérieur des boucles, pour ceci, il propose deux méthodes différentes, à gérer dans la configuration sur la clé `'glob'`, comme suit :
 
-Cette convention du suffixe *`_g`* est une information active dans **GABS**, elle produit plusieurs effets bénéfiques : 
+- **1. Méthode stricte** (par défaut) = `glob'=>true;` : cela oblige à indiquer clairement quelles variables il faut rendre globales, pour être accessibles dans les boucles, en ajoutant tout simplement un suffixe *`_g`* au nom de la clé concernée (par exemple : *`s_variable_globale_g`*) ;
+- **2. Méthode générale** = `'glob'=>false` : cette configuration oblige **GABS** à rendre la **portée globale** de toutes les variables présentes au premier niveau du tableau de données principal.
+
+Avec le **méthode stricte**, qui est **fortement recommandée**, le suffixe *`_g`* devient une information active dans **GABS**, elle produit plusieurs effets bénéfiques : 
+
 - ✅ **limite les traitements =** résultats plus rapides et efficaces 
 - ✅ **évite les collusions =** permet la maîtrise de l'affichage des données 
 - ✅ **auto-documentation =** facilite grandement le travail sur les gabarits
@@ -915,7 +919,7 @@ $data = array_merge(
 
 ### Suffixe global *`_g`*
 
-Ajouter *`_g`* en fin de clé, cela indique à **GABS** que la variable devient globale et qu'elle doit être accessible à l'intérieur de toutes les boucles :
+Ajouter *`_g`* en fin de clé (méthode stricte), cela indique à **GABS** que la variable devient globale et qu'elle doit être accessible à l'intérieur de toutes les boucles :
 
 ```php
 's_currency_g' => '€'    // disponible dans {a_products{ ... }a_products}
