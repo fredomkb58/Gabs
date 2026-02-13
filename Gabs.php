@@ -28,7 +28,6 @@
  * 	- Système de purification (suppression) automatique des caches obsolètes  
  * 	- Masquage automatique (commentaire HTML) des balises orphélines dans le gabarit  
  *  - Convention de nommage pratique recommandée pour le nommage des clés du tableau de données 
- *  - IMPORTANT : les données doivent être fournies déjà formatées (dates, nombres, URLs, chemins, conversions, encodages, etc.).
  * ----------
  * [en] Features:
  * 	- Lightweight and very fast HTML template engine 
@@ -50,7 +49,6 @@
  * 	- Automatic system for purifying (deleting) obsolete caches  
  * 	- Automatic hiding (HTML comment) of orphaned tags in the template  
  *  - Recommended practical naming convention for naming data table keys 
- *  - IMPORTANT: Data must be provided already formatted (dates, numbers, URLs, paths, conversions, encodings, etc.). 
  * ----------
  * Crédits : Claude-AI, Gemini-AI, Mistral-AI, ChatGPT-AI, Perplexity-AI, StackOverflow, php.net, w3schools, Mdn_, CodePen, GitHub, GitLab, developpez.com, regex101.com, onlinephp.io, Wikipedia, etc…
  * ----------
