@@ -423,7 +423,7 @@ $offset = ($page - 1) * 10;  // = 10
 ]10]}a_products}
 ```
 
-#### Tri inverse *`!`*
+#### Tri inverse avec *`!`*
 
 ```html 
 <!-- Gabarit GABS -->
