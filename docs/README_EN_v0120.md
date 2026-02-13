@@ -470,9 +470,13 @@ Showing: 11 to 20 of 150 (Page 2)
 
 #### Global variables in loops *`_g`*
 
-By default, all root-level variables are accessible inside loops. That said, it is **strongly recommended** to adopt a simple and very useful convention: **adding the `_g` suffix to keys** in the main data array (for example: *`s_global_variable_g`*).
+**GABS** allows direct access to root-level variables within loops. To achieve this, it offers two different methods, managed in the configuration of the `glob` key, as follows:
 
-This *`_g`* suffix convention is an active signal in **GABS**, producing several beneficial effects:
+- **1. Strict method** (default) = `'glob'=>true;`: This requires clearly specifying which variables should be made global to be accessible within loops, simply by adding the suffix *`_g`* to the key name in question (for example: *`s_global_variable_g`*);
+- **2. General method** = `'glob'=>false`: This configuration forces **GABS** to make the **scope global** for all variables present at the first level of the main data table.
+
+With the **strict method**, which is **highly recommended**, the *`_g`* suffix becomes active information in **GABS**, producing several beneficial effects:
+
 - ✅ **limits processing =** faster and more efficient results
 - ✅ **avoids collisions =** gives full control over data display
 - ✅ **self-documenting =** greatly eases working on templates
@@ -916,7 +920,7 @@ $data = array_merge(
 
 ### Global suffix *`_g`*
 
-Adding *`_g`* at the end of a key tells **GABS** that the variable becomes global and must be accessible inside all loops:
+Adding *`_g`* at the end of a key (strict method), tells **GABS** that the variable becomes global and must be accessible inside all loops:
 
 ```php
 's_currency_g' => '$'    // available in {a_products{ ... }a_products}
