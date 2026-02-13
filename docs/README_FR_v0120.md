@@ -699,7 +699,7 @@ $data = array(
 <p>Développeuse passionnée depuis 10 ans.</p>
 <p>Prix : 1 234,50 €</p>
 <p>Âge : 35 ans</p>
-<p>ontact : al***@example.com</p>
+<p>Contact : al***@example.com</p>
 ```
 
 ### Convention de nommage des filtres
