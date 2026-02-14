@@ -4,7 +4,7 @@
 
 # GABS
 
-> **{ logique sans bruit && design sans echo }**
+> **{ logique sans bruit && design sans echo }** - **{ logic without noise && design without echo }**
 
 *Version v0120*
 
@@ -15,10 +15,7 @@
 
 # Changelog 
 
-> **{ logique sans bruit && design sans echo }**
-> **{ logic without noise && design without echo }**
-
-Toutes les modifications notables de ce projet sont documentées dans ce fichier.
+Toutes les modifications notables de ce projet sont documentées dans ce fichier.<br>
 All notable changes to this project are documented in this file.
 
 ---
