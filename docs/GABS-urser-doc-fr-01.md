@@ -12,7 +12,7 @@
 
 ---
 
-# GABS — Documentation Utilisateur - Niveau 1
+# Documentation Utilisateur - Niveau 1
 
 **Apprenez GABS par l'exemple — du premier gabarit à l'application complète.**
 
