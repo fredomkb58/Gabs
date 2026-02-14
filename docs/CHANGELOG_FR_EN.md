@@ -171,8 +171,11 @@ All notable changes to this project are documented in this file.
 
 <div align="center">
 
-**{ logique sans bruit && design sans echo }**
-**{ logic without noise && design without echo }**
+![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/medias/Gabs-Logo-Blanc-256.svg)
+
+# GABS
+
+> **{ logique sans bruit && design sans echo }** - **{ logic without noise && design without echo }**
 
 [GitHub](https://github.com/fredomkb58/Gabs)
 
