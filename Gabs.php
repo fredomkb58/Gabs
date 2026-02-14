@@ -630,7 +630,7 @@ class Gabs
     private function _getBoolPart_s($aRes, $nNro, $sTemp)
     {
         foreach ( $aRes as $aItm ) {
-        	$sRemp = (isset($aItm[$nNro])) ? $aItm[$nNro] : '';
+        	$sRemp = (isset($aItm[$nNro])) ? trim($aItm[$nNro]) : '';
             $sTemp = str_replace($aItm[0], $sRemp, $sTemp);
         }
         return $sTemp;
