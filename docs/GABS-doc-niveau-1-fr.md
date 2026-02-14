@@ -759,8 +759,8 @@ Deux nouvelles clés racine — dont une avec le suffixe `_g` :
 'c_url_home'    => '/',                   // lien vers l'accueil
 ```
 
-> **Pourquoi `_g` ?**
-> Par défaut, les variables du niveau racine ne sont pas transmises à l'intérieur des boucles — c'est un choix de performance et de clarté. Le suffixe `_g` est le signal explicite : *"cette variable doit être accessible partout"*. Sans lui, `{s_site_name_g}` dans `{a_comments{ … }a_comments}` n't afficherait rien.
+> **Pourquoi le suffixe `_g` ?**
+> Par défaut (avec la configuration initiale), les variables du niveau racine ne sont pas transmises à l'intérieur des boucles — c'est un choix de performance et de clarté. Le suffixe `_g` dans le nom d'une clé, est le signal explicite : *"cette variable doit être accessible partout"*. Sans lui, la variable `{s_site_name}` dans la boucle `{a_comments{ … }a_comments}` n'afficherait rien.
 
 ---
 
