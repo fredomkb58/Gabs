@@ -3,6 +3,7 @@
  * GABS - funcs_gabs - Filtres par défaut - default filters
  * @version     0120 - PHP 5.6+
  * @copyright   FredoMkb © 2026 
+ * @github      https://github.com/fredomkb58/Gabs.git
  * @credits     Claude-AI (Anthropic) 
  * ---
  * Ne modifiez pas ce fichier — utilisez "funcs_user.php" pour vos filtres personnalisés.
