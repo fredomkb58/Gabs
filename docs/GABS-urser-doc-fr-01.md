@@ -74,6 +74,7 @@ mon-blog/
 ```
 
 > **Pourquoi séparer `data.php` et `index.php` ?**
+> 
 > Pour l'exemple, c'est plus clair. En pratique, vos données viendront d'une base de données ou d'un fichier, mais la logique reste la même : on prépare un tableau PHP, on passe ce tableau à GABS.
 
 ---
@@ -117,6 +118,7 @@ $data = array(
 ```
 
 > **Les préfixes, c'est quoi ?**
+> 
 > GABS utilise les 2 premiers caractères de la clé pour savoir comment traiter la donnée :
 > - `s_` → **string** : texte, échappé automatiquement (protection XSS)
 > - `n_` → **number** : nombre, échappé automatiquement
@@ -212,6 +214,7 @@ Maintenant, le gabarit. On place les clés du tableau PHP entre accolades `{ }` 
 ```
 
 > **Les filtres, comment ça marche ?**
+> 
 > On ajoute `|f_nom_du_filtre` juste après la clé, à l'intérieur des accolades.
 > On peut en enchaîner plusieurs : `{s_name|f_trim|f_title}` — ils s'appliquent de gauche à droite.
 > Le `|}` final (pipe sans filtre) signifie "affiche la donnée brute, sans échappement".
@@ -250,6 +253,7 @@ echo $gabs->get('article.gabs', $data, $aFuncsGabs);
 ```
 
 > **Pourquoi `dbug => true` en développement ?**
+> 
 > Cela active la balise spéciale `{_|}` : si vous l'ajoutez dans votre gabarit, GABS affichera toutes vos données en clair — très utile pour vérifier ce que contient votre tableau.
 
 ---
@@ -331,6 +335,7 @@ En ouvrant `index.php` dans votre navigateur, GABS va fusionner les données et 
 ---
 
 > 🎯 **Prêt pour l'étape suivante ?**
+> 
 > À l'étape 2, on va enrichir cette page avec des **conditions** : afficher un badge "À la une", gérer le statut de l'article, ajouter une classe CSS dynamique selon la catégorie.
 
 ---
@@ -379,6 +384,7 @@ $data = array(
 ```
 
 > **Pourquoi des booléens séparés ?**
+> 
 > En Logic-Less, c'est le PHP qui décide si quelque chose est vrai ou faux — pas le gabarit. Le gabarit se contente d'afficher en fonction de cette décision. C'est cette séparation claire qui rend le code maintenable.
 
 ---
@@ -405,6 +411,7 @@ GABS propose deux syntaxes pour les conditions. On va utiliser les deux dans cet
 ```
 
 > ⚠️ **Contrainte technique — à retenir absolument :**
+> 
 > La syntaxe courte **doit toujours tenir sur une seule ligne**, sans retour à la ligne à l'intérieur. Si votre contenu est long ou multiligne, utilisez obligatoirement la syntaxe complète à la place.
 
 Voici le gabarit mis à jour — on ne montre ici que les parties modifiées ou ajoutées :
@@ -541,7 +548,9 @@ Avec `b_featured = true`, `b_draft = false` et `b_photo = true`, GABS produit :
 </article>
 ```
 
-> **Astuce :** Pour tester vos conditions, passez temporairement `b_draft => true` dans vos données et rechargez la page — vous verrez l'avertissement brouillon apparaître et le badge "Publié" disparaître. C'est la puissance du Logic-Less : on change les données, le gabarit s'adapte seul.
+> **Astuce :**
+>
+> Pour tester vos conditions, passez temporairement `b_draft => true` dans vos données et rechargez la page — vous verrez l'avertissement brouillon apparaître et le badge "Publié" disparaître. C'est la puissance du Logic-Less : on change les données, le gabarit s'adapte seul.
 
 ---
 
@@ -559,6 +568,7 @@ Avec `b_featured = true`, `b_draft = false` et `b_photo = true`, GABS produit :
 ---
 
 > 🎯 **Prêt pour l'étape suivante ?**
+> 
 > À l'étape 3, on va afficher la **liste des commentaires** — et découvrir les boucles, les tableaux associatifs, et les infos de boucle pour afficher le nombre total de commentaires.
 
 ---
@@ -712,6 +722,7 @@ On ajoute la section commentaires après le contenu de l'article :
 ---
 
 > 🎯 **Prêt pour l'étape suivante ?**
+> 
 > À l'Étape 4, on structure tout avec des **inclusions** — un `header.gabs` et un `footer.gabs` partagés, et on découvre le suffixe `_g` pour rendre des variables accessibles dans toutes les boucles.
 
 ---
