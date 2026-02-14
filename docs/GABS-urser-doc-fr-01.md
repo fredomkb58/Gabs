@@ -1,3 +1,6 @@
+<style>
+  blockquote { padding:0.6em 1.2em; color:#bbc; background-color:#000; }
+</style>
 <div align="center">
 
 ![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/medias/Gabs-Logo-Blanc-256.svg)
