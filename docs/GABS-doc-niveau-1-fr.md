@@ -1,6 +1,18 @@
-# GABS — Documentation Utilisateur
+<div align="center">
+
+![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/medias/Gabs-Logo-Blanc-256.svg)
+
+# GABS
 
 > **{ logique sans bruit && design sans echo }**
+
+*Version v0120*
+
+</div>
+
+---
+
+# GABS — Documentation Utilisateur - Niveau 1
 
 **Apprenez GABS par l'exemple — du premier gabarit à l'application complète.**
 
