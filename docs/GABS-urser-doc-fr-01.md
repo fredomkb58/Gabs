@@ -957,9 +957,5 @@ En 4 étapes, on a construit une page d'article complète et on a couvert **tous
 Le projet est maintenant structuré, maintenable, et prêt à évoluer. C'est exactement l'esprit de GABS. 🎯
 
 ---
-<style>
-  blockquote { padding:0.6em 1.2em; color:#bbc; background-color:#000; }
-</style>
 
 *— fin du Cas 1 — Blog —*
-
