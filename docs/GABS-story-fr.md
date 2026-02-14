@@ -30,7 +30,7 @@ Puis le projet est resté dans les cartons… jusqu'en 2025.
 
 Cette année-là, j'ai à nouveau eu besoin d'un moteur de gabarits léger pour un nouveau projet. J'ai regardé ce qui existait dans l'écosystème PHP — les solutions populaires avaient évolué, certaines faisaient consensus, mais elles restaient clairement surdimensionnées pour mes besoins. J'ai repensé à **GABS**, je l'ai ressorti, et j'ai décidé de le moderniser.
 
-Pour avoir un regard neuf et objectif sur le code, j'ai sollicité plusieurs agents IA — Gemini, ChatGPT, Perplexity, Mistral et Claude. Leurs analyses m'ont surpris par leur pertinence : suggestions d'amélioration, nouvelles fonctionnalités, corrections de fond. Je ne m'y attendais pas à ce niveau de retour, et cela m'a donné la motivation nécessaire pour reprendre sérieusement le projet.
+Pour avoir un regard neuf et objectif sur le code, j'ai sollicité plusieurs agents IA — Claude, Gemini, ChatGPT, Perplexity et Mistra. Leurs analyses m'ont surpris par leur pertinence : suggestions d'amélioration, nouvelles fonctionnalités, corrections de fond. Je ne m'y attendais pas à ce niveau de retour, et cela m'a donné la motivation nécessaire pour reprendre sérieusement le projet.
 
 À partir de la version v0112, j'ai travaillé en étroite collaboration avec ces agents pour rendre **GABS** plus souple et plus robuste. Dès la v0118, le résultat me semblait suffisamment solide pour mériter d'être partagé — j'ai donc publié le projet sur GitHub.
 
