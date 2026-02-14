@@ -233,8 +233,8 @@ $gabs->conf(array(
 
 // --- 5. On lance le rendu et on affiche le résultat ---
 echo $gabs->get('article.gabs', $data, $aFuncsGabs);
-//                     ↑               ↑          ↑
-//               gabarit         données      filtres
+//                   ↑             ↑         ↑
+//                gabarit       données    filtres
 ```
 
 > **Pourquoi `dbug => true` en développement ?**
