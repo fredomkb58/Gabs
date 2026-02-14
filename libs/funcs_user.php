@@ -3,6 +3,8 @@
  * GABS - funcs_user - Filtres utilisateur - User filters
  * @version     0120 - PHP 5.6+
  * @copyright   FredoMkb © 2026 
+ * @github      https://github.com/fredomkb58/Gabs.git
+ * @credits     Claude-AI (Anthropic) 
  * ---
  * Ajoutez ici tous vos filtres personnalisés
  * Add all your custom filters here
