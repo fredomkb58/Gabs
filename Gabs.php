@@ -3,9 +3,9 @@
  * Gabs
  * @version		0120 - PHP 5.6+ 
  * @role		Moteur de gabarits Php-Html - Php-Html Template Engine 
- * @slogan		{ logique sans bruit && design sans echo } 
- * 				{ logic without noise && design without echo } 
+ * @slogan		{ logique sans bruit && design sans echo } - { logic without noise && design without echo } 
  * @licence		Projet libre et open-source - Free and open-source project 
+ * @github		https://github.com/fredomkb58/Gabs.git
  * @copyright	FredoMkb © 2026 
  * ----------
  * [fr] Fonctionnalités :
@@ -878,12 +878,8 @@ class Gabs
 					if (!empty($this->aTemps['glob'])) { $uVal = array_merge($this->aTemps['glob'], $uVal); }
 					$aRemp[] = str_replace($this->aTools['list'][1], array($uKey, $nCnt++), $this->_getParse_s($aItm[1], $uVal));
 				} else {
-					$bTypeRaws = in_array(substr($sTag, 0, 2), $this->aTools['type']['raws']);
-					$bChngLoop = $this->_getIsFind_b($aItm[1], $this->aTools['chng']['loop']); 
-					if ($this->aConfs['escp'] && !$bTypeRaws && !$bChngLoop) {
-						$uVal = $this->_getEscp_s($uVal);
-					}
-					$aRemp[] = str_replace($this->aTools['list'][0], array($uKey, $uVal, $nCnt++), $aItm[1]);
+					$sItm = $this->_getVars_s($this->aTools['loop'][1], $uVal, $aItm[1]);
+					$aRemp[] = str_replace($this->aTools['list'][1], array($uKey, $nCnt++), $sItm);
 				}
 			}
 
