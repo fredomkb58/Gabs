@@ -956,7 +956,7 @@ Ajouter *`_g`* en fin de clé (méthode stricte), cela indique à **GABS** que l
 
 **Auteur :** FredoMkb
 
-[**L'histoire de GABS**](https://github.com/fredomkb58/Gabs/blob/4b74cb66043f5692ca0c5c1c07b25a33eaa9ae6d/docs/GABS-story-fr.md)
+[**L'histoire de GABS**](https://github.com/fredomkb58/Gabs/blob/main/docs/GABS-story-fr.md)
 
 **Réalisé avec l'aide de :**
 - 🤖 Claude-IA (Anthropic) — architecture, débogage, documentation 
