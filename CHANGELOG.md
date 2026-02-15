@@ -1,4 +1,18 @@
-# Changelog — GABS
+<div align="center">
+
+![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/medias/Gabs-Logo-Blanc-256.svg)
+
+# GABS
+
+> **{ logique sans bruit && design sans echo }** - **{ logic without noise && design without echo }**
+
+*Version v0120*
+
+</div>
+
+---
+
+# Changelog 
 
 > **{ logique sans bruit && design sans echo }**
 > **{ logic without noise && design without echo }**
