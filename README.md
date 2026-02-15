@@ -957,7 +957,7 @@ Adding *`_g`* at the end of a key (strict method), tells **GABS** that the varia
 
 **Author:** FredoMkb
 
-[**The Story of GABS**](https://github.com/fredomkb58/Gabs/blob/4b74cb66043f5692ca0c5c1c07b25a33eaa9ae6d/docs/GABS-story-en.md)
+[**The Story of GABS**](https://github.com/fredomkb58/Gabs/blob/079983c92b7e503680f7839ef50bac2eb62f8c15/docs/GABS-story-en.md)
 
 **Built with the help of:**
 - 🤖 Claude-AI (Anthropic) — architecture, debugging, documentation
