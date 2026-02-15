@@ -121,17 +121,21 @@ In the **GABS** template, place **the PHP array keys** in the right place with t
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- variable -->
     <title>{s_title}</title>
 </head>
 <body>
+    <!-- variable -->
     <h1>Hello {s_name}!</h1>
 
+    <!-- conditional binary block -->
     {b_premium{
         <p class="premium">⭐ Premium Member</p>
     }b_premium{
         <p>Standard Member</p>
     }b_premium}
 
+    <!-- loop block -->
     <ul>
     {a_hobbies{
         <li>{v}</li>
