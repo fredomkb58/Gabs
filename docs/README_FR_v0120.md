@@ -121,17 +121,21 @@ Dans le gabarit **GABS**, placez **les clés du tableau PHP** au bon endroit ave
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- variable -->
     <title>{s_title}</title>
 </head>
 <body>
+    <!-- variable -->
     <h1>Bonjour {s_name} !</h1>
 
+    <!-- bloc conditionnel binaire -->
     {b_premium{
         <p class="premium">⭐ Membre Premium</p>
     }b_premium{
         <p>Membre Standard</p>
     }b_premium}
 
+    <!-- bloc de boucle -->
     <ul>
     {a_hobbies{
         <li>{v}</li>
