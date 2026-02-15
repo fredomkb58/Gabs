@@ -969,7 +969,7 @@ Adding *`_g`* at the end of a key (strict method), tells **GABS** that the varia
 
 <div align="center">
 
-![GABS-logo](https://github.com/fredomkb58/Gabs/blob/main/medias/Gabs-Logo-Blanc-256.svg)
+[**The Story of GABS**](https://github.com/fredomkb58/Gabs/blob/main/docs/GABS-story-en.md)
 
 # GABS
 
