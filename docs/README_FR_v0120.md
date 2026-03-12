@@ -726,7 +726,7 @@ $aFuncsUser['mon_filtre'] = function($v) { return strtoupper($v); };
 
 ---
 
-## ⚙️Configuration
+## ⚙️ Configuration
 
 ### Mode développement
 
