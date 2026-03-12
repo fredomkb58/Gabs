@@ -28,7 +28,7 @@
 - [Fonctionnalités](#-fonctionnalités)
 - [Syntaxe](#-syntaxe)
 - [Filtres](#-filtres-)
-- [Configuration](#-configuration)
+- [Configuration](#-Configuration)
 - [Performance](#-performance)
 - [Sécurité](#-sécurité)
 - [Exemples complets](#-exemples-complets)
